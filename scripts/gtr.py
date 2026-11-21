@@ -6,7 +6,7 @@
   nashville "1 4 5 6m" --key Bb numbers -> chord names (also accepts roman: "I IV V vi")
   transpose "G C D Em" --from G --to Bb
   doublestops KEY --interval 6|3 --strings GE|DB|GB|BE   diatonic sixths/thirds ladder as tab
-  scale KEY [--type major|minor|majpent|minpent] [--frets 0-15]   fretboard map of degrees
+  scale KEY [--type major|minor|majpent|minpent|mixolydian|majblues] [--frets 0-15]   fretboard map of degrees
   check --key G [--chords "G C G D"] [--capo N] FILE|-   verify a tab: notes, degree, sol-fa, chord fit per bar
   render "D9+B8 - D10+B10 - ... | ..." [--steps 8|12|16] [--chords "G C"]   aligned tab + count line
          (steps per bar: 8 = 4/4 eighths, 12 = 12/8, 16 = sixteenths; '-' = rest; '+' joins simultaneous notes)
@@ -135,7 +135,8 @@ def cmd_doublestops(a):
 
 def cmd_scale(a):
     t, minor, root = parse_key(a.key); f = uses_flats(root, minor)
-    types = {'major':MAJ,'minor':MIN,'majpent':[0,2,4,7,9],'minpent':[0,3,5,7,10]}
+    types = {'major':MAJ,'minor':MIN,'majpent':[0,2,4,7,9],'minpent':[0,3,5,7,10],
+             'mixolydian':[0,2,4,5,7,9,10],'majblues':[0,2,3,4,7,9]}
     ivs = types[a.type or ('minor' if minor else 'major')]
     lo, hi = map(int, a.frets.split('-')); tun = open_pcs(STD)
     print('fret ' + ''.join(f"{x:>4}" for x in range(lo, hi+1)))
